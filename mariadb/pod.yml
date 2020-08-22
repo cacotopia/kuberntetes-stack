@@ -4,7 +4,6 @@ metadata:
   name: mariadb
   labels:
     app: mariadb
-
 spec:
   serviceName: mariadb
   replicas: 1

@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-
   name: sentinel
   labels:
     app: sentinel
@@ -61,5 +60,5 @@ spec:
       volumes:
         - name: vol-log
           hostPath:
-            path: /www/k8s/foxdev/sentinel/logs
+            path: sentinel/logs
             type: Directory
