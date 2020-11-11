@@ -14,7 +14,3 @@ kubectl get pod
 echo -e "\n\n\n"
 
 echo " success"
-
-
-
-
