@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: boss-mobile-h5
+  namespace: galileo
+spec:
+  selector:
+    app: boss-mobile-h5-app
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80

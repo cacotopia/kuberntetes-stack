@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mobile-weixin-deploy
+  namespace: galileo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mobile-weixin-app
+      version: 'v1'
+  template:
+    metadata:
+      labels:
+        app: mobile-weixin-app
+        version: 'v1'
+    spec:
+      containers:
+      - name: backend
+        image: registry.supos.com/galileo/galileo-mobile-weixin:latest
+        imagePullPolicy: Always
+        ports:
+        - name: httpd
+          containerPort: 80
+

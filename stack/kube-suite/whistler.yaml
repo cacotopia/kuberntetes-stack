@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: kube-suite
+  name: whistler-web
+spec:
+  ports:
+  - name: whistler-web
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: whistler
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: kube-suite
+  name: whistler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whistler
+  template:
+    metadata:
+      labels:
+        app: whistler
+    spec:
+      containers:
+        - name: example
+          image: 'registry.supos.com/library/tools/whistler:1.0.0-RELEASE'
+          env:
+          - name: DING_TOKEN
+            value: "1ac547176c5264c844cc85e9060eb6433f8f6d685960fcd4178549adb28bf3b6"
+          - name: DING_SECRET
+            value: "SECd69a1185960f5909b75fa26253bda38cd2ec0486bc451d4deb102493abcee387"
+          - name: ALERT_CLUSTER
+            value: "aliyun-boss"
+          ports:
+            - containerPort: 8080
+              name: http-port

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: kube-suite
+  name: es-deploy
+  labels:
+    service: es-deploy
+  annotations:
+    backup.velero.io/backup-volumes: data
+spec:
+  selector:
+    matchLabels:
+      app: es-deploy
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: es-deploy
+        service: es-deploy
+    spec:
+      containers:
+      - name: es
+        image: registry.supos.com/library/elasticsearch/elasticsearch-oss:6.8.5
+        env:
+        - name: ES_JAVA_OPTS
+          value: "-Xms512m -Xmx512m"
+        readinessProbe:
+          tcpSocket:
+            port: 9200
+          initialDelaySeconds: 20
+          periodSeconds: 30
+        ports:
+        - containerPort: 9200
+        - containerPort: 9300
+        volumeMounts:
+          - name: data
+            mountPath: /usr/share/elasticsearch/data
+          - name: timezone
+            mountPath: /etc/localtime
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: kube-logging-es-data-pvc
+        - name: timezone
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Shanghai

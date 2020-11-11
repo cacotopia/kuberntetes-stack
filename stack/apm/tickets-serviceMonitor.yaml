@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: tickets-metrics
+  namespace: kube-suite
+spec:
+  selector:
+    matchLabels:
+      app: tickets
+  endpoints:
+    - port: http
+      interval: 10s
+      honorLabels: true
+      scheme: http
+      path: '/management/prometheus'
+  namespaceSelector:
+    matchNames:
+     - galileo

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: governor
+  namespace: galileo
+spec:
+  selector:
+    app: governor
+  ports:
+  - name: http
+    port: 8100
+    targetPort: 8100

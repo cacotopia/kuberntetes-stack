@@ -1,0 +1,23 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: wordpress-mysql-test
+  namespace: wordpress
+  labels:
+    app: mariadb
+    chart: mariadb-7.3.12
+    component: master
+    heritage: Helm
+    release: wordpress
+spec:
+  type: NodePort
+  selector:
+    app: mariadb
+    component: master
+    release: wordpress
+  ports:
+    - name: mysql
+      protocol: TCP
+      port: 3306
+      targetPort: 3306
+      nodePort: 31306

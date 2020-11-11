@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: oauth
+  namespace: galileo
+spec:
+  selector:
+    app: oauth
+  ports:
+    - name: oauth
+      port: 8094

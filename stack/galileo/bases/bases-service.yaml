@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bases
+  namespace: galileo
+spec:
+  selector:
+    app: bases
+  ports:
+  - name: http
+    port: 8082
+    targetPort: 8082

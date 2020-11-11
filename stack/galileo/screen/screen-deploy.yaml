@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: screen-deploy
+  namespace: galileo
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1  
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: screen-app
+      version: "v1"
+  template:
+    metadata:
+      labels:
+        app: screen-app
+        version: "v1"
+    spec:
+      containers:
+        - name: backend
+          image: registry.supos.com/galileo/screen-frontent:0.1.1
+          ports:
+            - name: httpd
+              containerPort: 8

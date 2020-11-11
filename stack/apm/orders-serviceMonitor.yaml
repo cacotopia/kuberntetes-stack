@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: orders-metrics
+  namespace: kube-suite
+spec:
+  selector:
+    matchLabels:
+      app: orders
+  endpoints:
+    - port: http
+      interval: 10s
+      honorLabels: true
+      scheme: http
+      path: '/management/prometheus'
+  namespaceSelector:
+    matchNames:
+     - galileo

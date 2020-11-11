@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: developer-guide-docs
+  namespace: galileo
+spec:
+  selector:
+    app: developer-guide-docs-app
+  ports:
+  - name: http
+    port: 8099
+    targetPort: 8099

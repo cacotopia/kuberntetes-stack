@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: developers
+  namespace: galileo
+spec:
+  selector:
+    app: developers
+  ports:
+  - name: http
+    port: 8092
+    targetPort: 8092

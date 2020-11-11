@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  apps-frontend
+  namespace: galileo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  apps-frontend-app
+      version: 'v1'
+  template:
+    metadata:
+      labels:
+        app:  apps-frontend-app
+        version: 'v1'
+    spec:
+      containers:
+      - name: backend
+        image: registry.supos.com/galileo/apps-frontend:1.10.1
+        imagePullPolicy: Always
+        ports:
+        - name: httpd
+          containerPort: 80
+

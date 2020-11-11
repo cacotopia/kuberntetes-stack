@@ -1,0 +1,9 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: oss-service
+  namespace: galileo
+spec:
+  type: ExternalName
+  externalName: minio.boss-minio.svc.cluster.local

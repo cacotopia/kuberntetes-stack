@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: openapi
+  namespace: galileo
+  labels:
+    app: openapi
+spec:
+  selector:
+    app: openapi
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080

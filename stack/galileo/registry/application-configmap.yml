@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application-config
+  namespace: galileo-registry
+#common configuration shared between all applications
+data:
+  application.yml: |-
+    configserver:
+      name:  JHipster Registry
+      status: Connected to the JHipster Registry running in Kubernetes
+    eureka:
+      client:
+        enabled: true
+        healthcheck:
+          enabled: true
+        initial-instance-info-replication-interval-seconds: 15
+        instance-info-replication-interval-seconds: 15
+        registry-fetch-interval-seconds: 15
+        fetch-registry: true
+        register-with-eureka: true
+        eureka-service-url-poll-interval-seconds: 15
+        serviceUrl:
+          defaultZone:
+            http://admin:${jhipster.registry.password}@jhipster-registry.galileo-registry.svc.cluster.local:8761/eureka/
+      instance:
+        lease-renewal-interval-in-seconds: 10
+        registry-default-open-for-traffic-count: 0
+        status-page-url-path: ${management.endpoints.web.base-path}/info
+        health-check-url-path: ${management.endpoints.web.base-path}/health
+        metadata-map:
+          zone: ${GALILEO_ZONE:primary} # This is needed for the load balancer
+          profile: ${spring.profiles.active}
+          version: #project.version#
+          git-version: ${git.commit.id.describe:}
+          git-commit: ${git.commit.id.abbrev:}
+          git-branch: ${git.branch:}
+    jhipster:
+      security:
+        authentication:
+          jwt:
+            base64-secret: OTBhNmQ1NTQ2ZGMwMGJmY2EzMzExY2QwMWU4NDgwODk4ZTM0NDJkODVkZGQ4YmRmNjNjZjFkNjUwNjEyNmJmNGNhYzQ1YTQ3NGQ4ZDI5OWIyOWYzOWNmYmU3ZTE4YTA3NTRlNw==
+  # app specific configuration
+  jhipster-registry.yml: |-
+    eureka:
+      client:
+        service-url:
+          defaultZone: http://admin:${spring.security.user.password}@jhipster-registry-0.jhipster-registry.galileo-registry.svc.cluster.local:8761/eureka/,
+                       http://admin:${spring.security.user.password}@jhipster-registry-1.jhipster-registry.galileo-registry.svc.cluster.local:8761/eureka/,
+                       http://admin:${spring.security.user.password}@jhipster-registry-2.jhipster-registry.galileo-registry.svc.cluster.local:8761/eureka/
+

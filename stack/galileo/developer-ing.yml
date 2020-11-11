@@ -1,0 +1,81 @@
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: galileo-developer
+  namespace: galileo
+  labels:
+    app.kubernetes.io/instance: wordpress
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: wordpress
+    helm.sh/chart: wordpress-9.0.3
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    meta.helm.sh/release-name: wordpress
+    meta.helm.sh/release-namespace: galileo
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      set $action '';
+      if ($host = 'developer.supos.com') {
+          set $action 'A';
+      }
+      if ($args ~* 'action=logout') {
+        set $action '${action}L';
+      }
+      if ($args ~* 'action=register') {
+        set $action '${action}R';
+      }
+      if ($action = AR) {
+         rewrite ^/wp-login.php https://i.supos.com/register?siteFrom=wordpress&siteFromUrl=https://developer.supos.com redirect;
+      }
+      if ($action = AL) {
+        rewrite ^/wp-login.php https://i.supos.com/auth/wp/logout redirect;
+      }
+      if ($action = A) {
+        rewrite ^/wp-login.php https://i.supos.com/login?siteFrom=wordpress&siteFromUrl=https://developer.supos.com redirect;
+      }
+      if ($request_uri = '/MP_verify_pkv4Ufgcew5FtMhv.txt') {
+        rewrite ^/(.*)$ /galileo/$1 permanent ;
+      }
+spec:
+  rules:
+    - host: developer.supos.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: wordpress
+              servicePort: http
+          - path: /edu
+            backend:
+              serviceName: developer-community
+              servicePort: 80
+          - path: /static/
+            backend:
+              serviceName: developer-community
+              servicePort: 80
+          - path: /services/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /auth/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /zuul/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /group
+            backend:
+              serviceName: oss-service
+              servicePort: 9000
+          - path: /galileo/
+            backend:
+              serviceName: oss-service
+              servicePort: 9000
+    - host: wpcf.supos.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: wordpress
+              servicePort: http

@@ -1,0 +1,9 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: yrcloud-svc
+  namespace: galileo
+spec:
+  type: ExternalName
+  externalName: 172.28.1.79

@@ -1,0 +1,31 @@
+{{- if .Values.ingress.enabled -}}
+{{- $basePath := .Values.ingress.basePath -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: graylog-ingress
+  namespace: kube-suite
+  {{- if .Values.ingress.labels }}
+  labels:
+    {{- toYaml .Values.ingress.labels | nindent 4 }}
+  {{- end }}
+  {{- if .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+    {{- range $host := .Values.ingress.hosts }}
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: {{ $basePath }}
+            backend:
+              serviceName: graylog3
+              servicePort: 9000
+    {{- end -}}
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- toYaml .Values.ingress.tls | nindent 4 }}
+  {{- end -}}
+{{- end -}}

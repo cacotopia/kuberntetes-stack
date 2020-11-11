@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deprecated-apps-console-frontend
+  namespace: galileo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deprecated-apps-console-frontend-app
+  template:
+    metadata:
+      labels:
+        app: deprecated-apps-console-frontend-app
+    spec:
+      containers:
+      - name: backend
+        image: registry.supos.com/galileo/deprecated-apps-console-frontend:1.8.1
+        imagePullPolicy: Always
+        ports:
+        - name: httpd
+          containerPort: 80
+

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ess-gateway
+  namespace: galileo
+spec:
+  selector:
+    app: ess-gateway
+  ports:
+    - name: ess-gateway
+      port: 8095

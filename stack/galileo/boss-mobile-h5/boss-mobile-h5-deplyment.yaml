@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: boss-mobile-h5
+  namespace: galileo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: boss-mobile-h5-app
+      version: 'v1'
+  template:
+    metadata:
+      labels:
+        app: boss-mobile-h5-app
+        version: 'v1'
+    spec:
+      containers:
+      - name: backend
+        image: registry.supos.com/galileo/boss-mobile-h5:0.4.1
+        imagePullPolicy: Always
+        ports:
+        - name: httpd
+          containerPort: 80

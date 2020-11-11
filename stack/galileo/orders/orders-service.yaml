@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders
+  namespace: galileo
+spec:
+  selector:
+    app: orders
+  ports:
+  - name: http
+    port: 8084
+    targetPort: 8084

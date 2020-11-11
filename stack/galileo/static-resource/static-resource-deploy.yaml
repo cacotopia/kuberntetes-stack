@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: static-resource
+  namespace: galileo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: static-resource-app
+  template:
+    metadata:
+      labels:
+        app: static-resource-app
+    spec:
+      containers:
+      - name: backend
+        image: registry.supos.com/galileo/static-resource:0.0.4
+        imagePullPolicy: Always
+        ports:
+        - name: httpd
+          containerPort: 80

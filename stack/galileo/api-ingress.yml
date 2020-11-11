@@ -1,0 +1,51 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: api-ingress
+  namespace: galileo
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+       rewrite ^/v1/(.*)$ /services/v1/$1 break;
+spec:
+  rules:
+  - host: api.supos.com
+    http:
+      paths:
+      - path: /oauth
+        backend:
+          serviceName: auth
+          servicePort: 9998
+      - path: /assets
+        backend:
+          serviceName: auth
+          servicePort: 9998
+      - path: /login
+        backend:
+          serviceName: auth
+          servicePort: 9998
+      - path: /oauth2
+        backend:
+          serviceName: oauth
+          servicePort: 8094
+      - path: /ess-gate
+        backend:
+           serviceName: ess-gateway
+           servicePort: 8095
+      - path: /open-gateway
+        backend:
+           serviceName: open-gateway
+           servicePort: 8096
+      - path: /saas-gateway
+        backend:
+          serviceName: saas-gateway
+          servicePort: 8120
+      - path: /ess
+        backend:
+          serviceName: governor
+          servicePort: 8100
+      - path: /
+        backend:
+          serviceName: openapi
+          servicePort: 8080

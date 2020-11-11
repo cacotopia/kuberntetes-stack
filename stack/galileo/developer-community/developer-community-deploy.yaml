@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: developer-community
+  namespace: galileo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: developer-community-app
+  template:
+    metadata:
+      labels:
+        app: developer-community-app
+    spec:
+      containers:
+        - name: backend
+          image: registry.supos.com/galileo/developer-community:0.4.0
+          imagePullPolicy: Always
+          ports:
+            - name: httpd
+              containerPort: 80

@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openapi
+  namespace: galileo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openapi
+      version: 'v1'
+  template:
+    metadata:
+      labels:
+        app: openapi
+        version: 'v1'
+    spec:
+      containers:
+        - name: openapi
+          image: registry.supos.com/galileo/openapi:1.2.6.RELEASE
+          imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: "Asia/Shanghai"
+            - name: JAVA_OPTS
+              value: "-Xmx1024m -Xms256m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -Dcom.alibaba.nacos.naming.log.level=WARN -Dcom.alibaba.nacos.config.log.level=WARN"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+            - name: NACOS_SERVER_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: nacos-secret
+                  key: nacos-username
+            - name: NACOS_SERVER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nacos-secret
+                  key: nacos-password
+            - name: NACOS_SERVER_ADDR
+              valueFrom:
+                configMapKeyRef:
+                    name: nacos-cm
+                    key: nacos.server-addr
+            - name: NACOS_CONFIG_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                    name: nacos-cm
+                    key: nacos.config.namespace
+            - name: NACOS_DISCOVERY_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                    name: nacos-cm
+                    key: nacos.discovery.namespace
+            - name: SPRING_OUTPUT_ANSI_ENABLED
+              value: "NEVER"
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /management/health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /management/health
+              port: 8080
+            initialDelaySeconds: 120

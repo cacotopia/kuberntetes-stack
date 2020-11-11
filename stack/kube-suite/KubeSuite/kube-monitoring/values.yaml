@@ -1,0 +1,33 @@
+# Default values for kube-logging.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+alert:
+  webhook: http://whistler-web:8080/dingtalk
+
+ingress:
+  annotations: {}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10M"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  # tls:
+    # Secrets must be manually created in the namespace.
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
+  prometheus:
+  # Used to create an Ingress record.
+    enabled: true
+    hosts:
+      - prometheus.boss-infra.supos.com
+  prometheus:
+  # Used to create an Ingress record.
+    enabled: true
+    hosts:
+      - prometheus.boss-infra.supos.com
+  grafana:
+  # Used to create an Ingress record.
+    enabled: true
+    hosts:
+      - grafana.boss-infra.supos.com

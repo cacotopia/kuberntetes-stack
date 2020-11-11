@@ -1,0 +1,44 @@
+{{ if or .Values.ingress.prometheus.enabled .Values.ingress.grafana.enabled }}
+{{- $basePath := .Values.ingress.basePath -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: prometheus-ingress
+  namespace: kube-suite
+  {{- if .Values.ingress.labels }}
+  labels:
+    {{- toYaml .Values.ingress.labels | nindent 4 }}
+  {{- end }}
+  {{- if .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+{{ if .Values.ingress.prometheus.enabled }}
+    {{- range $host := .Values.ingress.prometheus.hosts }}
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: {{ $basePath }}
+            backend:
+              serviceName: prometheus-k8s
+              servicePort: 9090
+    {{- end -}}
+{{- end }}
+{{ if .Values.ingress.grafana.enabled }}
+    {{- range $host := .Values.ingress.grafana.hosts }}
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: {{ $basePath }}
+            backend:
+              serviceName: grafana
+              servicePort: 3000
+    {{- end -}}
+{{- end }}
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- toYaml .Values.ingress.tls | nindent 4 }}
+  {{- end -}}
+{{ end }}

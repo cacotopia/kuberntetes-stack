@@ -1,0 +1,220 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: galileo-ing
+  namespace: galileo
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      set $action '';
+      if ($host = 'mc.supos.com') {
+          set $action 'A';
+      }
+      if ($host = 'i.supos.com') {
+          set $action 'A';
+      }
+      if ($request_uri = '/MP_verify_pkv4Ufgcew5FtMhv.txt') {
+        set $action '${action}R';
+      }
+      if ($request_uri = '/mobile/login/MP_verify_pkv4Ufgcew5FtMhv.txt') {
+        set $action '${action}R';
+      }
+      if ($action = AR) {
+        rewrite ^/(.*)$ /galileo/$1 permanent ;
+      }
+spec:
+  rules:
+    - host: i.supos.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: accounts-frontend
+              servicePort: 80
+          - path: /services/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /auth/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /zuul/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /group
+            backend:
+              serviceName: oss-service
+              servicePort: 9000
+          - path: /galileo/
+            backend:
+              serviceName: oss-service
+              servicePort: 9000
+    - host: cloud.supos.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: cloud-console-frontend
+              servicePort: 80
+          - path: /chrome
+            backend:
+              serviceName: static-resource
+              servicePort: 80
+          - path: /services/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /auth/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /zuul/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /group
+            backend:
+              serviceName: oss-service
+              servicePort: 9000
+          - path: /galileo/
+            backend:
+              serviceName: oss-service
+              servicePort: 9000
+    - host: store.supos.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: apps-frontend
+              servicePort: 80
+          - path: /mystore_admin
+            backend:
+              serviceName: deprecated-apps-console-frontend
+              servicePort: 80
+          - path: /services/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /auth/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /zuul/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /group
+            backend:
+              serviceName: oss-service
+              servicePort: 9000
+          - path: /galileo/
+            backend:
+              serviceName: oss-service
+              servicePort: 9000
+    - host: open.supos.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: developers-frontend
+              servicePort: 80
+          - path: /docs/console/guide
+            backend:
+              serviceName: instructions-docs
+              servicePort: 8199
+          - path: /docs/apis/server/api
+            backend:
+              serviceName: open-docs
+              servicePort: 8090
+          - path: /services/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /auth/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /zuul/
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /group
+            backend:
+              serviceName: oss-service
+              servicePort: 9000
+          - path: /galileo/
+            backend:
+              serviceName: oss-service
+              servicePort: 9000
+    - host: op.supos.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: mp-frontend
+              servicePort: 80
+          - path: /screen/
+            backend:
+              serviceName: screen
+              servicePort: 80
+          - path: /services/
+            backend:
+              serviceName: mp-openapi
+              servicePort: 8088
+          - path: /auth/
+            backend:
+              serviceName: mp-openapi
+              servicePort: 8088
+          - path: /zuul/
+            backend:
+              serviceName: mp-openapi
+              servicePort: 8088
+          - path: /group
+            backend:
+              serviceName: oss-service
+              servicePort: 9000
+          - path: /galileo/
+            backend:
+              serviceName: oss-service
+              servicePort: 9000
+    - host: openapi.supos.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+    - host: mp-openapi.supos.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: mp-openapi
+              servicePort: 8088
+    - host: auth.supos.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: openapi
+              servicePort: 8080
+          - path: /oauth
+            backend:
+              serviceName: auth
+              servicePort: 9998
+    - host: oss.supos.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: oss-service
+              servicePort: 9000
+    - host: website.supos.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: supos-website
+              servicePort: 8299

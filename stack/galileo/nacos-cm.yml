@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nacos-cm
+  namespace: galileo
+data:
+  nacos.server-addr: "nacos-headless.nacos.svc.cluster.local:8848"
+  nacos.config.namespace: "382798c9-b532-4dde-ba6f-9c9eba9aab4f"
+  nacos.discovery.namespace: "382798c9-b532-4dde-ba6f-9c9eba9aab4f"

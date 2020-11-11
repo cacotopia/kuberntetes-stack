@@ -1,0 +1,7 @@
+namespaces: 
+  - kube-suite
+helmResourcePolicy: "keep"
+labels: {}
+annotations: {}
+
+

@@ -1,0 +1,9 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: health-svc
+  namespace: galileo
+spec:
+  type: ExternalName
+  externalName: 172.28.1.79

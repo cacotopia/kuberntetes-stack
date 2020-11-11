@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: instructions-docs-deploy
+  namespace: galileo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: instructions-docs-app
+      version: "v1"
+  template:
+    metadata:
+      labels:
+        app: instructions-docs-app
+        version: "v1"
+    spec:
+      containers:
+        - name: backend
+          image: registry.supos.com/galileo/instructions-docs:0.1.0
+          imagePullPolicy: Always
+          ports:
+            - name: httpd
+              containerPort: 8199

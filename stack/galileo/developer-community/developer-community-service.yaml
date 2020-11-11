@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: developer-community
+  namespace: galileo
+spec:
+  selector:
+    app: developer-community-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80

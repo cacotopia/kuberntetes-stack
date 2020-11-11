@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jhipster-registry
+  namespace: galileo-registry
+  labels:
+    app: jhipster-registry
+spec:
+  selector:
+    app: jhipster-registry
+  ports:
+    - name: http
+      port: 8761
+      targetPort: 8761
